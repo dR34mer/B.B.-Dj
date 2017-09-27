@@ -9,12 +9,10 @@ namespace BB_DiscordDj.src.Entities
     class SongQueue
     {
         List<PlayerSong> Queue;
-        private int currentlyPlaying;
 
         public SongQueue()
         {
             Queue = new List<PlayerSong>();
-            currentlyPlaying = 0;
         }
 
         public SongQueue(PlayerSong welcome)
@@ -23,7 +21,6 @@ namespace BB_DiscordDj.src.Entities
             {
                 welcome
             };
-            currentlyPlaying = 0;
         }
 
         public void AddSong(PlayerSong song)
@@ -36,27 +33,9 @@ namespace BB_DiscordDj.src.Entities
             return Queue[idx];
         }
 
-        public PlayerSong Next()
+        public bool HasNext(int idx)
         {
-            if (currentlyPlaying < Queue.Count)
-            {
-                return Queue[currentlyPlaying++];
-            }
-            throw new Exception("Queue is at its end");
-        }
-
-        public bool HasNext()
-        {
-            return currentlyPlaying < Queue.Count;
-        }
-        public void Rewind()
-        {
-            this.currentlyPlaying = 0;
-        }
-
-        public PlayerSong GetSong()
-        {
-            return Queue[currentlyPlaying];
+            return idx < Queue.Count ? true : false;
         }
     }
 }

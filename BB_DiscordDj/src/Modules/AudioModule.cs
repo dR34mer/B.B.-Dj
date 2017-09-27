@@ -74,11 +74,19 @@ namespace BB_DiscordDj.src.Modules
             await _service.Next(Context.Guild, Context.Channel);
         }
 
+        [Command("prev",RunMode=RunMode.Async)]
+        [Summary("Включает предыдущий трэк.")]
+        public async Task PrevCmd()
+        {
+            await _service.Prev(Context.Guild, Context.Channel);
+        }
+
         [Command("song",RunMode=RunMode.Async)]
         [Summary("Напишет информацию о текущем трэке. Если это не Казах.")]
         public async Task SongCmd()
         {
             await _service.Song(Context.Channel);
         }
+
     }
 }

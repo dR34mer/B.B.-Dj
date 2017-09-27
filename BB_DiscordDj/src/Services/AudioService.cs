@@ -97,5 +97,14 @@ namespace BB_DiscordDj.src.Services
         {
             await channel.SendMessageAsync("Сейчас заряжено: " + audioPlayer.Song() + ".");
         }
+
+        public async Task Prev(IGuild guild, IMessageChannel channel)
+        {
+            IAudioClient client;
+            if(ConnectedChannels.TryGetValue(guild.Id, out client))
+            {
+                await audioPlayer.Prev(client, channel);
+            }
+        }
     }
 }

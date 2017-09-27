@@ -16,6 +16,7 @@ namespace BB_DiscordDj.src.Entities
     {
         private readonly SongQueue queue;
         private Process playerProcess = null;
+        private int currentlyPlaying;
 
         public AudioPlayer(bool addWelcome)
         {
@@ -30,6 +31,7 @@ namespace BB_DiscordDj.src.Entities
             {
                 queue = new SongQueue();
             }
+            currentlyPlaying = 0;
         }
 
         private Stream GetStream()
@@ -40,7 +42,7 @@ namespace BB_DiscordDj.src.Entities
         private bool SetupProcess()
         {
             String arguments;
-            PlayerSong nextSong = queue.Next();
+            PlayerSong nextSong = queue.GetSongByIdx(currentlyPlaying);
 
             switch (nextSong.Storage)
             {
@@ -68,7 +70,7 @@ namespace BB_DiscordDj.src.Entities
         public async Task Play(IAudioClient client, IMessageChannel channel)
         {
             Stream clientStream = client.CreatePCMStream(AudioApplication.Music);
-            if (!queue.HasNext())
+            if (!queue.HasNext(currentlyPlaying))
             {
                 await channel.SendMessageAsync("Конец очереди.");
                 return;
@@ -82,7 +84,8 @@ namespace BB_DiscordDj.src.Entities
                 SetupProcess();
                 await GetStream().CopyToAsync(clientStream);
                 await clientStream.FlushAsync().ConfigureAwait(false);
-            } while (queue.HasNext());
+                currentlyPlaying++;
+            } while (queue.HasNext(currentlyPlaying));
 
         }
 
@@ -93,14 +96,14 @@ namespace BB_DiscordDj.src.Entities
 
         public async Task Rewind()
         {
-            queue.Rewind();
+            currentlyPlaying = 0;
         }
 
         public async Task Stop()
         {
             if (playerProcess != null && !playerProcess.StandardOutput.EndOfStream)
             {
-                playerProcess.StandardOutput.Close();
+                playerProcess.StandardOutput.Close(); // костыль, обязательно придумаю как по людски сделать, но не в первую очередь
             }
 
         }
@@ -108,13 +111,22 @@ namespace BB_DiscordDj.src.Entities
         public async Task Next(IAudioClient cl, IMessageChannel ch)
         {
             await Stop();
+            currentlyPlaying++;
             System.Threading.Thread.Sleep(2000);
             await Play(cl,ch);
         }
 
         public string Song()
         {
-            return queue.GetSong().ToString();
+            return queue.GetSongByIdx(currentlyPlaying).ToString();
+        }
+
+        public async Task Prev(IAudioClient cl, IMessageChannel ch)
+        {
+            await Stop();
+            currentlyPlaying--;
+            System.Threading.Thread.Sleep(1900);
+            await Play(cl, ch);
         }
     }
 }
