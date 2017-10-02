@@ -178,5 +178,10 @@ namespace BB_DiscordDj.src.Entities
 
             return builder.Build();
         }
+
+        public void ClearQue()
+        {
+            queue.CleanQue();
+        }
     }
 }

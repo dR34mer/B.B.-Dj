@@ -124,5 +124,11 @@ namespace BB_DiscordDj.src.Services
         {
             await channel.SendMessageAsync("", false, audioPlayer.GetList());
         }
+
+        public async Task ClearQue(IMessageChannel channel)
+        {
+            audioPlayer.ClearQue();
+            await channel.SendMessageAsync("Чисто, как орбит чистый плей-лист");
+        }
     }
 }

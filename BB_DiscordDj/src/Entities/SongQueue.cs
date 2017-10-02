@@ -67,6 +67,12 @@ namespace BB_DiscordDj.src.Entities
                 OriginalSeq = null;
             }
         }
+
+        public void CleanQue()
+        {
+            this.Queue = new List<PlayerSong>();
+            this.OriginalSeq = null;
+        }
        
     }
 

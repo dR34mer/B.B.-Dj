@@ -101,5 +101,12 @@ namespace BB_DiscordDj.src.Modules
         {
             await _service.GetList(Context.Channel);
         }
+
+        [Command("clear",RunMode=RunMode.Async)]
+        [Summary("Очистка очереди.")]
+        public async Task ClearCmd()
+        {
+            await _service.ClearQue(Context.Channel);
+        }
     }
 }

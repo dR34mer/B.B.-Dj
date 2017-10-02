@@ -188,6 +188,7 @@
     <Compile Include="src\Entities\PlayerSong.cs" />
     <Compile Include="src\Entities\SongQueue.cs" />
     <Compile Include="src\Entities\StorageType.cs" />
+    <Compile Include="src\Entities\UserPlayList.cs" />
     <Compile Include="src\Modules\AudioModule.cs" />
     <Compile Include="src\Modules\HelpModule.cs" />
     <Compile Include="src\Program.cs" />
