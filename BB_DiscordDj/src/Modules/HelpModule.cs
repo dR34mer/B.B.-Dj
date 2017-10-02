@@ -24,7 +24,7 @@ namespace BB_DiscordDj.src.Modules
             var builder = new EmbedBuilder()
             {
                 Color = new Color(114, 137, 218),
-                Description = "Я хочу, что бы ты мной покомандовал_А"
+                Description = "Командуй мной полнотью <3"
             };
 
             foreach(var module in _service.Modules)

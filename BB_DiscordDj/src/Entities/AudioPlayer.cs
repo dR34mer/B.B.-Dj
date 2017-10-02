@@ -115,12 +115,23 @@ namespace BB_DiscordDj.src.Entities
             await Stop();
             currentlyPlaying++;
             System.Threading.Thread.Sleep(2000);
-            await Play(cl,ch);
+            await Play(cl, ch);
         }
 
-        public string Song()
+        public Embed Song()
         {
-            return queue.GetSongByIdx(currentlyPlaying).ToString();
+            var builder = new EmbedBuilder()
+            {
+                Color = new Color(19, 189, 33),
+            };
+
+            builder.AddField(new EmbedFieldBuilder()
+            {
+                Name = "Сейчас заряжено: ",
+                Value = queue.GetSongByIdx(currentlyPlaying).ToString(),
+            });
+
+            return builder.Build();
         }
 
         public async Task Prev(IAudioClient cl, IMessageChannel ch)
@@ -130,11 +141,42 @@ namespace BB_DiscordDj.src.Entities
             System.Threading.Thread.Sleep(1900);
             await Play(cl, ch);
         }
-        
+
         public void Shuffle()
         {
             queue.Shuffle();
         }
 
+
+        public Embed GetList()
+        {
+            var builder = new EmbedBuilder()
+            {
+                Color = new Color(221, 34, 235),
+            };
+
+            String descriptionString = null;
+
+            for (int i = 0; i < queue.QueueInstance.Count; i++)
+            {
+                if (i == currentlyPlaying) descriptionString += "__***";
+                descriptionString += i + ") ";
+                descriptionString += queue.QueueInstance[i].ToString();
+                if (i == currentlyPlaying) descriptionString += "***__";
+                descriptionString += "\n";
+            }
+
+            if (!string.IsNullOrWhiteSpace(descriptionString))
+            {
+                builder.AddField(x =>
+                {
+                    x.Name = "Список пиписок:";
+                    x.Value = descriptionString;
+                    x.IsInline = false;
+                });
+            }
+
+            return builder.Build();
+        }
     }
 }

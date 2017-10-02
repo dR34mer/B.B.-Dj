@@ -63,7 +63,17 @@ namespace BB_DiscordDj.src.Services
             });
             PlayerSong newOne = new PlayerSong(StorageType.Web, Url, Name, Author, Album);
             await audioPlayer.AddSong(newOne);
-            await channel.SendMessageAsync(newOne.ToString() + ", добавлена в конец очереди, пользователем ***" + msg.Author.Username + "***");
+
+            var builder = new EmbedBuilder() { Color = new Color(224, 123, 22), Author = new EmbedAuthorBuilder() { Name = msg.Author.Username, } };
+
+            builder.AddField(new EmbedFieldBuilder()
+            {
+                Name = Name = msg.Author.Username + " добавил в конец очереди: ",
+                Value = newOne.ToString(),
+                IsInline = false,
+            });
+
+            await channel.SendMessageAsync("", false, builder.Build());
         }
 
         public async Task Rewind(IMessageChannel channel)
@@ -90,7 +100,7 @@ namespace BB_DiscordDj.src.Services
 
         public async Task Song(IMessageChannel channel)
         {
-            await channel.SendMessageAsync("Сейчас заряжено: " + audioPlayer.Song() + ".");
+            await channel.SendMessageAsync("", false, audioPlayer.Song());
         }
 
         public async Task Prev(IGuild guild, IMessageChannel channel)
@@ -107,12 +117,12 @@ namespace BB_DiscordDj.src.Services
             if (!audioPlayer.IsShuffled)
                 await channel.SendMessageAsync("Порядок восстановлен.");
             else
-                await channel.SendMessageAsync("Шуфлим немножчк");
+                await channel.SendMessageAsync("Шуфлим немножчк.");
         }
 
         public async Task GetList(IMessageChannel channel)
         {
-
+            await channel.SendMessageAsync("", false, audioPlayer.GetList());
         }
     }
 }

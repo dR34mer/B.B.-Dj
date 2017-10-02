@@ -25,7 +25,9 @@ namespace BB_DiscordDj.src.Entities
 
         public override string ToString()
         {
-            return $"**{Author}**:**{Name}** из альбома - {Album}, ссылка: <{Url}>";
+            String album;
+            album = (Album == "null") ? "" : (" из альбома - " + Album + ",");
+            return $"**{Author}**:**{Name}** {album} [link]({Url})";
         }
     }
 }

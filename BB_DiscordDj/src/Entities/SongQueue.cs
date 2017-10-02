@@ -11,6 +11,11 @@ namespace BB_DiscordDj.src.Entities
         List<PlayerSong> Queue;
         List<PlayerSong> OriginalSeq;
 
+        public List<PlayerSong> QueueInstance
+        {
+            get => Queue;
+        }
+
         public bool IsShuffled { get => (OriginalSeq == null) ? false : true; }
 
         public SongQueue()
@@ -56,7 +61,7 @@ namespace BB_DiscordDj.src.Entities
                 OriginalSeq = null;
             }
         }
-
+       
     }
 
     static class ListExtension

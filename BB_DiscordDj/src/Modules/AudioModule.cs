@@ -95,5 +95,11 @@ namespace BB_DiscordDj.src.Modules
             await _service.Shuffle(Context.Channel);
         }
 
+        [Command("list",RunMode=RunMode.Async)]
+        [Summary("Текущая обойма плеера.")]
+        public async Task ListCmd()
+        {
+            await _service.GetList(Context.Channel);
+        }
     }
 }
