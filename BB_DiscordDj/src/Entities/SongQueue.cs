@@ -8,8 +8,8 @@ namespace BB_DiscordDj.src.Entities
 {
     class SongQueue
     {
-        List<PlayerSong> Queue;
-        List<PlayerSong> OriginalSeq;
+        protected List<PlayerSong> Queue;
+        protected List<PlayerSong> OriginalSeq;
 
         public List<PlayerSong> QueueInstance
         {
@@ -29,6 +29,12 @@ namespace BB_DiscordDj.src.Entities
             {
                 welcome
             };
+        }
+
+        public SongQueue(SongQueue other)
+        {
+            this.Queue = other.Queue;
+            this.OriginalSeq = other.OriginalSeq;
         }
 
         public void AddSong(PlayerSong song)
