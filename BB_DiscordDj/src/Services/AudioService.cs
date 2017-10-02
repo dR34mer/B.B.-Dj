@@ -20,9 +20,8 @@ namespace BB_DiscordDj.src.Services
 
         public async Task JoinAudio(IGuild guild, IVoiceChannel target)
         {
-            IAudioClient client;
 
-            if (ConnectedChannels.TryGetValue(guild.Id, out client))
+            if (ConnectedChannels.TryGetValue(guild.Id, out IAudioClient client))
                 return;
             if (target.Guild.Id != guild.Id)
                 return;
@@ -35,8 +34,7 @@ namespace BB_DiscordDj.src.Services
 
         public async Task LeaveAudio(IGuild guild)
         {
-            IAudioClient client;
-            if (ConnectedChannels.TryRemove(guild.Id, out client))
+            if (ConnectedChannels.TryRemove(guild.Id, out IAudioClient client))
             {
                 await client.StopAsync();
                 await Console.Out.WriteLineAsync($"Disconnected from voice on {guild.Name}.");
@@ -51,8 +49,7 @@ namespace BB_DiscordDj.src.Services
 
             //
 
-            IAudioClient client;
-            if (ConnectedChannels.TryGetValue(guild.Id, out client))
+            if (ConnectedChannels.TryGetValue(guild.Id, out IAudioClient client))
             {
                 await audioPlayer.Play(client, channel);
             }
@@ -66,28 +63,26 @@ namespace BB_DiscordDj.src.Services
             });
             PlayerSong newOne = new PlayerSong(StorageType.Web, Url, Name, Author, Album);
             await audioPlayer.AddSong(newOne);
-            await channel.SendMessageAsync(newOne.ToString() + ", добавлена в конец очереди, пользователем ***" + msg.Author.Username + "***" );
+            await channel.SendMessageAsync(newOne.ToString() + ", добавлена в конец очереди, пользователем ***" + msg.Author.Username + "***");
         }
 
         public async Task Rewind(IMessageChannel channel)
         {
             await audioPlayer.Rewind();
-            await channel.SendMessageAsync("Наматываем касету на палец...");
+            await channel.SendMessageAsync("Наматываем касету на карандаш...");
         }
 
         public async Task Stop(IGuild guild)
         {
-            IAudioClient client;
-            if (ConnectedChannels.TryGetValue(guild.Id, out client))
+            if (ConnectedChannels.TryGetValue(guild.Id, out IAudioClient client))
             {
                 await audioPlayer.Stop();
             }
         }
 
-        public async Task Next(IGuild guild,IMessageChannel channel)
+        public async Task Next(IGuild guild, IMessageChannel channel)
         {
-            IAudioClient client;
-            if (ConnectedChannels.TryGetValue(guild.Id, out client))
+            if (ConnectedChannels.TryGetValue(guild.Id, out IAudioClient client))
             {
                 await audioPlayer.Next(client, channel);
             }
@@ -100,11 +95,24 @@ namespace BB_DiscordDj.src.Services
 
         public async Task Prev(IGuild guild, IMessageChannel channel)
         {
-            IAudioClient client;
-            if(ConnectedChannels.TryGetValue(guild.Id, out client))
+            if (ConnectedChannels.TryGetValue(guild.Id, out IAudioClient client))
             {
                 await audioPlayer.Prev(client, channel);
             }
+        }
+
+        public async Task Shuffle(IMessageChannel channel)
+        {
+            audioPlayer.Shuffle();
+            if (!audioPlayer.IsShuffled)
+                await channel.SendMessageAsync("Порядок восстановлен.");
+            else
+                await channel.SendMessageAsync("Шуфлим немножчк");
+        }
+
+        public async Task GetList(IMessageChannel channel)
+        {
+
         }
     }
 }

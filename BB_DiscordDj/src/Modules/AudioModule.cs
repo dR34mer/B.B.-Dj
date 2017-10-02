@@ -88,5 +88,12 @@ namespace BB_DiscordDj.src.Modules
             await _service.Song(Context.Channel);
         }
 
+        [Command("shuffle", RunMode=RunMode.Async)]
+        [Summary("Включает/выключает случайный порядок воспроизведения.")]
+        public async Task ShuffleCmd()
+        {
+            await _service.Shuffle(Context.Channel);
+        }
+
     }
 }

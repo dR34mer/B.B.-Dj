@@ -39,7 +39,6 @@ namespace BB_DiscordDj
                 .AddSingleton<CommandHandler>()
                 .AddSingleton<LoggingService>()
                 .AddSingleton<StartupService>()
-                .AddSingleton<Random>()
                 .AddSingleton(_config);
 
             var provider = services.BuildServiceProvider();

@@ -9,6 +9,9 @@ namespace BB_DiscordDj.src.Entities
     class SongQueue
     {
         List<PlayerSong> Queue;
+        List<PlayerSong> OriginalSeq;
+
+        public bool IsShuffled { get => (OriginalSeq == null) ? false : true; }
 
         public SongQueue()
         {
@@ -26,6 +29,8 @@ namespace BB_DiscordDj.src.Entities
         public void AddSong(PlayerSong song)
         {
             Queue.Add(song);
+            if (OriginalSeq != null)
+                OriginalSeq.Add(song);
         }
 
         public PlayerSong GetSongByIdx(int idx)
@@ -36,6 +41,37 @@ namespace BB_DiscordDj.src.Entities
         public bool HasNext(int idx)
         {
             return idx < Queue.Count ? true : false;
+        }
+
+        public void Shuffle()
+        {
+            if (OriginalSeq == null)
+            {
+                OriginalSeq = new List<PlayerSong>(Queue);
+                Queue.Shuffle();
+            }
+            else
+            {
+                Queue = OriginalSeq;
+                OriginalSeq = null;
+            }
+        }
+
+    }
+
+    static class ListExtension
+    {
+        private static Random rng = new Random();
+
+        public static void Shuffle<T>(this IList<T> list)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                int j = rng.Next(i, list.Count);
+                T value = list[i];
+                list[i] = list[j];
+                list[j] = value;
+            }
         }
     }
 }

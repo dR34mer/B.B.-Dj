@@ -18,6 +18,8 @@ namespace BB_DiscordDj.src.Entities
         private Process playerProcess = null;
         private int currentlyPlaying;
 
+        public bool IsShuffled => queue.IsShuffled;
+
         public AudioPlayer(bool addWelcome)
         {
             if (addWelcome)
@@ -128,5 +130,11 @@ namespace BB_DiscordDj.src.Entities
             System.Threading.Thread.Sleep(1900);
             await Play(cl, ch);
         }
+        
+        public void Shuffle()
+        {
+            queue.Shuffle();
+        }
+
     }
 }
