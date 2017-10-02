@@ -69,8 +69,12 @@ namespace BB_DiscordDj.src.Entities
             return true;
         }
 
-        public async Task Play(IAudioClient client, IMessageChannel channel)
+        public async Task Play(IAudioClient client, IMessageChannel channel, int position = -42)
         {
+            if(position != -42)
+            {
+                currentlyPlaying = position;
+            }
             Stream clientStream = client.CreatePCMStream(AudioApplication.Music);
             if (!queue.HasNext(currentlyPlaying))
             {

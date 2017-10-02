@@ -36,16 +36,16 @@ namespace BB_DiscordDj.src.Modules
         }
 
         [Command("play", RunMode = RunMode.Async)]
-        [Summary("Начинает воспроизведение с текущей позиции в плейлисте.")]
-        public async Task PlayCmd()
+        [Summary("Начинает воспроизведение с текущей позиции в плейлисте или с указанной после команды. \nПрим.: !play 11")]
+        public async Task PlayCmd(int position = -42)
         {
-            await _service.SendAudioAsync(Context.Guild, Context.Channel, Context.Message as SocketMessage);
+            await _service.SendAudioAsync(Context.Guild, Context.Channel, Context.Message as SocketMessage, position);
         }
 
         [Command("queue", RunMode = RunMode.Async)]
-        [Summary("Добавляет музыку в конец очереди. "+
-            " \nПрим. !queue www.utub.com/somesong [\"О кумысе\"] [Казах] [\"Плейлист Казахстана\"]" +
-            "\nДоступные сайты можно посмотреть на гитхабе автора парсера" +
+        [Summary("Добавляет музыку в конец очереди. " +
+            " \nПрим. !queue www.utub.cum/somesong [\"О кумысе\"] [Казах] [\"Плейлист Казахстана\"]" +
+            "\nДоступные сайты:" +
             "\n<https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md>")]
         public async Task QueueCmd(string song, string songName = "null", string authorName = "null", string albumName = "null")
         {

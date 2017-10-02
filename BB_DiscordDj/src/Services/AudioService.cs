@@ -42,7 +42,7 @@ namespace BB_DiscordDj.src.Services
 
         }
 
-        public async Task SendAudioAsync(IGuild guild, IMessageChannel channel, SocketMessage msg)
+        public async Task SendAudioAsync(IGuild guild, IMessageChannel channel, SocketMessage msg, int position)
         {
             // Pre-processing things
             await channel.SendMessageAsync("Обрабатываю музяку.");
@@ -51,7 +51,10 @@ namespace BB_DiscordDj.src.Services
 
             if (ConnectedChannels.TryGetValue(guild.Id, out IAudioClient client))
             {
-                await audioPlayer.Play(client, channel);
+                if (position < 0)
+                    await audioPlayer.Play(client, channel);
+                else
+                    await audioPlayer.Play(client, channel, position);
             }
         }
 
@@ -133,7 +136,7 @@ namespace BB_DiscordDj.src.Services
 
         public async Task SavePlayList(IMessageChannel channel, SocketMessage msg, String playListName)
         {
-            if (audioPlayer.TrySavePlayList(msg.Author as SocketUser,playListName))
+            if (audioPlayer.TrySavePlayList(msg.Author as SocketUser, playListName))
             {
                 await channel.SendMessageAsync("Понял, принял.");
             }
