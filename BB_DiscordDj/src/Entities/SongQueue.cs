@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace BB_DiscordDj.src.Entities
 {
+    [Serializable]
     class SongQueue
     {
         protected List<PlayerSong> Queue;

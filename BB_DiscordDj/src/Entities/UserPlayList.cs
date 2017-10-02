@@ -14,13 +14,13 @@ namespace BB_DiscordDj.src.Entities
     [Serializable]
     class UserPlayList : SongQueue
     {
-        SocketUser socketUser;
+        String socketUser;
         DateTime dateTime;
         String playListName;
 
         public UserPlayList() : base() { }
 
-        public UserPlayList(SongQueue other,SocketUser user, String plName) : base(other)
+        public UserPlayList(SongQueue other,String user, String plName) : base(other)
         {
             dateTime = DateTime.Now;
             socketUser = user;
@@ -30,7 +30,7 @@ namespace BB_DiscordDj.src.Entities
         public UserPlayList(String path)
         {
             UserPlayList other = null;
-            using(FileStream fs = new FileStream(path, FileMode.Open))
+            using(FileStream fs = new FileStream(Directory.GetCurrentDirectory() + @"\data\" + path + ".dat", FileMode.Open))
             {
                 try
                 {
@@ -49,7 +49,12 @@ namespace BB_DiscordDj.src.Entities
 
         public bool TrySave()
         {
-            using (FileStream fs = new FileStream(playListName + ".dat", FileMode.Create))
+            String workingFolder = Directory.GetCurrentDirectory() + @"\data\";
+            if (!Directory.Exists(workingFolder))
+            {
+                Directory.CreateDirectory(workingFolder);
+            }
+            using (FileStream fs = new FileStream(Directory.GetCurrentDirectory() + @"\data\" + playListName + ".dat", FileMode.Create))
             {
                 try
                 {

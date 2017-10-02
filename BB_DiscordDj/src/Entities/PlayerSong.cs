@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace BB_DiscordDj.src.Entities
 {
+    [Serializable]
     class PlayerSong
     {
         public StorageType Storage { get; }

@@ -64,7 +64,7 @@ namespace BB_DiscordDj.src.Services
             PlayerSong newOne = new PlayerSong(StorageType.Web, Url, Name, Author, Album);
             await audioPlayer.AddSong(newOne);
 
-            var builder = new EmbedBuilder() { Color = new Color(224, 123, 22), Author = new EmbedAuthorBuilder() { Name = msg.Author.Username, } };
+            var builder = new EmbedBuilder() { Color = new Color(224, 123, 22) };
 
             builder.AddField(new EmbedFieldBuilder()
             {
@@ -129,6 +129,24 @@ namespace BB_DiscordDj.src.Services
         {
             audioPlayer.ClearQue();
             await channel.SendMessageAsync("Чисто, как орбит чистый плей-лист");
+        }
+
+        public async Task SavePlayList(IMessageChannel channel, SocketMessage msg, String playListName)
+        {
+            if (audioPlayer.TrySavePlayList(msg.Author as SocketUser,playListName))
+            {
+                await channel.SendMessageAsync("Понял, принял.");
+            }
+            else
+            {
+                await channel.SendMessageAsync("Не понял. Стэк исключения в консоли.");
+            }
+        }
+
+        public async Task LoadPlayList(IMessageChannel channel, String playListName)
+        {
+            audioPlayer.TryLoadPlayList(playListName);
+            await channel.SendMessageAsync("Подгружено.");
         }
     }
 }

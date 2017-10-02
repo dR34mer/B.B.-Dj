@@ -14,7 +14,7 @@ namespace BB_DiscordDj.src.Entities
 {
     class AudioPlayer
     {
-        private readonly SongQueue queue;
+        private SongQueue queue;
         private Process playerProcess = null;
         private int currentlyPlaying;
 
@@ -150,30 +150,40 @@ namespace BB_DiscordDj.src.Entities
 
         public Embed GetList()
         {
+            int page = 1;
+            int pageSize = 10;
             var builder = new EmbedBuilder()
             {
-                Color = new Color(221, 34, 235),
+                Color = new Color(221, 34, 235)
             };
 
-            String descriptionString = null;
-
-            for (int i = 0; i < queue.QueueInstance.Count; i++)
+            String[] descriptionString = new String[queue.QueueInstance.Count];
+            for (int j = 0; j < (queue.QueueInstance.Count / pageSize) + 1; j++)
             {
-                if (i == currentlyPlaying) descriptionString += "__***";
-                descriptionString += i + ") ";
-                descriptionString += queue.QueueInstance[i].ToString();
-                if (i == currentlyPlaying) descriptionString += "***__";
-                descriptionString += "\n";
-            }
-
-            if (!string.IsNullOrWhiteSpace(descriptionString))
-            {
-                builder.AddField(x =>
+                for (int i = (page * pageSize) - pageSize; i < queue.QueueInstance.Count && i < (pageSize * page); i++)
                 {
-                    x.Name = "Список пиписок:";
-                    x.Value = descriptionString;
-                    x.IsInline = false;
-                });
+                    if (i == currentlyPlaying) descriptionString[j] += "__***";
+                    descriptionString[j] += i + ") ";
+                    descriptionString[j] += queue.QueueInstance[i].ToString();
+                    if (i == currentlyPlaying) descriptionString[j] += "***__";
+                    descriptionString[j] += "\n";
+
+                }
+                page++;
+            }
+            page = 1;
+            foreach (String desc in descriptionString)
+            {
+                if (!string.IsNullOrWhiteSpace(desc))
+                {
+                    builder.AddField(x =>
+                    {
+                        x.Name = "Страница "+page +":";
+                        x.Value = desc;
+                        x.IsInline = false;
+                    });
+                }
+                page++;
             }
 
             return builder.Build();
@@ -182,6 +192,18 @@ namespace BB_DiscordDj.src.Entities
         public void ClearQue()
         {
             queue.CleanQue();
+        }
+
+        public bool TrySavePlayList(SocketUser user,String plName)
+        {
+            UserPlayList userPlayList = new UserPlayList(queue, user.Username, plName);
+            return userPlayList.TrySave();
+        }
+
+        public void TryLoadPlayList(String fileName)
+        {
+            UserPlayList userPlayList = new UserPlayList(fileName);
+            queue = userPlayList;
         }
     }
 }
