@@ -9,6 +9,7 @@ using System.IO;
 using Discord;
 using Discord.WebSocket;
 using Discord.Audio;
+using Microsoft.Extensions.Configuration;
 
 namespace BB_DiscordDj.src.Entities
 {
@@ -17,8 +18,14 @@ namespace BB_DiscordDj.src.Entities
         private SongQueue queue;
         private Process playerProcess = null;
         private int currentlyPlaying;
-
+        private IConfigurationRoot _config;
+        
         public bool IsShuffled => queue.IsShuffled;
+
+        public void LoadConfig(IConfigurationRoot config)
+        {
+            _config = config;
+        }
 
         public AudioPlayer(bool addWelcome)
         {
@@ -52,7 +59,8 @@ namespace BB_DiscordDj.src.Entities
                     arguments = $"/C ffmpeg.exe -hide_banner -loglevel panic -i \"{nextSong.Url}\" -ac 2 -f s16le -ar 48000 pipe:1";
                     break;
                 case StorageType.Web:
-                    arguments = $"/C youtube-dl.exe -o - {nextSong.Url} | ffmpeg.exe -i pipe:0 -ac 2 -f s16le -ar 48000 pipe:1";
+                    arguments = $"/C youtube-dl.exe {_config["args:pre_youtube-dl"]} {nextSong.Url} {_config["args:post_youtube.dl"]}" +
+                                $" | ffmpeg.exe {_config["args:ffmpeg"]}";
                     break;
                 default:
                     throw new Exception("There is no such Storage Type");
@@ -63,7 +71,7 @@ namespace BB_DiscordDj.src.Entities
                 FileName = "cmd.exe",
                 Arguments = arguments,
                 UseShellExecute = false,
-                RedirectStandardOutput = true,
+                RedirectStandardOutput = true
             });
 
             return true;
@@ -71,8 +79,10 @@ namespace BB_DiscordDj.src.Entities
 
         public async Task Play(IAudioClient client, IMessageChannel channel, int position = -42)
         {
-            if(position != -42)
+            if(position != -42 && position < queue.QueueInstance.Count)
             {
+                await Stop();
+                System.Threading.Thread.Sleep(1024);
                 currentlyPlaying = position;
             }
             Stream clientStream = client.CreatePCMStream(AudioApplication.Music);
@@ -196,6 +206,7 @@ namespace BB_DiscordDj.src.Entities
         public void ClearQue()
         {
             queue.CleanQue();
+            currentlyPlaying = 0;
         }
 
         public bool TrySavePlayList(SocketUser user,String plName)

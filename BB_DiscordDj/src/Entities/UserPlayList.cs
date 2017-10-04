@@ -12,17 +12,21 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace BB_DiscordDj.src.Entities
 {
     [Serializable]
+    [DataContract]
     class UserPlayList : SongQueue
     {
+        [DataMember]
         String socketUser;
-        DateTime dateTime;
+        [DataMember]
+        DateTime creationDate;
+        [DataMember]
         String playListName;
 
         public UserPlayList() : base() { }
 
         public UserPlayList(SongQueue other,String user, String plName) : base(other)
         {
-            dateTime = DateTime.Now;
+            creationDate = DateTime.Now;
             socketUser = user;
             playListName = plName;
         }
@@ -43,7 +47,7 @@ namespace BB_DiscordDj.src.Entities
             this.Queue = other.Queue;
             this.OriginalSeq = other.OriginalSeq;
             this.socketUser = other.socketUser;
-            this.dateTime = other.dateTime;
+            this.creationDate = other.creationDate;
             this.playListName = other.playListName;
         }
 

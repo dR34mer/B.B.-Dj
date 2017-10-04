@@ -10,13 +10,21 @@ using Discord;
 using Discord.WebSocket;
 using Discord.Audio;
 using BB_DiscordDj.src.Entities;
+using Microsoft.Extensions.Configuration;
 
 namespace BB_DiscordDj.src.Services
 {
     public class AudioService
     {
         private readonly ConcurrentDictionary<ulong, IAudioClient> ConnectedChannels = new ConcurrentDictionary<ulong, IAudioClient>();
+        private readonly IConfigurationRoot _config;
         private readonly AudioPlayer audioPlayer = new AudioPlayer(true);
+
+        public AudioService(IConfigurationRoot config)
+        {
+            _config = config;
+            audioPlayer.LoadConfig(_config);
+        }
 
         public async Task JoinAudio(IGuild guild, IVoiceChannel target)
         {
