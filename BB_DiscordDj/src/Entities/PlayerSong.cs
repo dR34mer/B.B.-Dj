@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BB_DiscordDj.src.Entities
 {
@@ -28,7 +24,7 @@ namespace BB_DiscordDj.src.Entities
         {
             String album;
             album = (Album == "null") ? "" : (" из альбома - " + Album + ",");
-            return $"**{Author}**:**{Name}** {album} [link]({Url})";
+            return $"**{Author}**:**{Name}** {album} [источник]({Url})";
         }
     }
 }
