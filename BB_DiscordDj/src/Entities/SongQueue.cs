@@ -75,6 +75,14 @@ namespace BB_DiscordDj.src.Entities
             this.Queue = new List<PlayerSong>();
             this.OriginalSeq = null;
         }
+
+        public void RemoveAt(int position)
+        {
+            PlayerSong temp = Queue[position];
+            Queue.Remove(temp);
+            if(OriginalSeq != null)
+                OriginalSeq.Remove(temp);
+        }
        
     }
 

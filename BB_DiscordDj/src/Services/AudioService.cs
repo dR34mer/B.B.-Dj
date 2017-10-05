@@ -154,5 +154,11 @@ namespace BB_DiscordDj.src.Services
             audioPlayer.TryLoadPlayList(playListName);
             await channel.SendMessageAsync("Подгружено.");
         }
+
+        public async Task RemoveSongAt(int position,IMessageChannel channel)
+        {
+            audioPlayer.RemoveSongAt(position);
+            await channel.SendMessageAsync("Удалено.");
+        }
     }
 }

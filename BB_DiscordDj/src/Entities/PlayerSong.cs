@@ -26,5 +26,23 @@ namespace BB_DiscordDj.src.Entities
             album = (Album == "null") ? "" : (" из альбома - " + Album + ",");
             return $"**{Author}**:**{Name}** {album} [источник]({Url})";
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+            if (obj == this) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            PlayerSong other = (PlayerSong)obj;
+
+            if (Author == other.Author && Name == other.Name && Url == other.Url)
+                return true;
+            else
+                return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() * Url.GetHashCode() * Name.GetHashCode();
+        }
     }
 }

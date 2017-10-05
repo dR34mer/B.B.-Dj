@@ -216,5 +216,15 @@ namespace BB_DiscordDj.src.Entities
             UserPlayList userPlayList = new UserPlayList(fileName);
             queue = userPlayList;
         }
+
+        public void RemoveSongAt(int position)
+        {
+            if (position < queue.QueueInstance.Count)
+            {
+                queue.RemoveAt(position);
+                if (currentlyPlaying >= queue.QueueInstance.Count)
+                    currentlyPlaying--;
+            }
+        }
     }
 }

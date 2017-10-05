@@ -18,6 +18,7 @@ namespace BB_DiscordDj.src.Modules
         }
 
         [Command("help"),Alias("пэрэмоха")]
+        [Summary("Удаляет всё порно с вашего компьютера. Угу, поздняк.")]
         public async Task HelpAsync()
         {
             string prefix = _config["prefix"];

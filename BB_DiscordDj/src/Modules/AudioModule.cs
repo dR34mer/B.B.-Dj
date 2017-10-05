@@ -24,7 +24,7 @@ namespace BB_DiscordDj.src.Modules
         }
 
         [Command("leave", RunMode = RunMode.Async)]
-        [Summary("Прогоняет бота из канала. (Например за Казаха)")]
+        [Summary("Прогоняет бота из канала.")]
         public async Task LeaveCmd()
         {
             await _service.LeaveAudio(Context.Guild);
@@ -40,7 +40,7 @@ namespace BB_DiscordDj.src.Modules
         [Command("queue", RunMode = RunMode.Async)]
         [Summary("Добавляет музыку в конец очереди. " +
             " \nПрим. !queue www.utub.cum/somesong [\"О кумысе\"] [Казах] [\"Плейлист Казахстана\"]" +
-            "\nДоступные сайты:" +
+            "\nОбрабатываемые сайты:" +
             "\n<https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md>")]
         public async Task QueueCmd(string song, string songName = "null", string authorName = "null", string albumName = "null")
         {
@@ -62,28 +62,28 @@ namespace BB_DiscordDj.src.Modules
         }
 
         [Command("next", RunMode = RunMode.Async)]
-        [Summary("Включает следующий трэк.")]
+        [Summary("Включает следующий трек.")]
         public async Task NextCmd()
         {
             await _service.Next(Context.Guild, Context.Channel);
         }
 
         [Command("prev", RunMode = RunMode.Async)]
-        [Summary("Включает предыдущий трэк.")]
+        [Summary("Включает предыдущий трек.")]
         public async Task PrevCmd()
         {
             await _service.Prev(Context.Guild, Context.Channel);
         }
 
         [Command("song", RunMode = RunMode.Async)]
-        [Summary("Напишет информацию о текущем трэке. Если это не Казах.")]
+        [Summary("Напишет информацию о текущем треке.")]
         public async Task SongCmd()
         {
             await _service.Song(Context.Channel);
         }
 
         [Command("shuffle", RunMode = RunMode.Async)]
-        [Summary("Включает/выключает случайный порядок воспроизведения.")]
+        [Summary("Перемешивает/возвращает оригинал плейлиста.")]
         public async Task ShuffleCmd()
         {
             await _service.Shuffle(Context.Channel);
@@ -111,10 +111,17 @@ namespace BB_DiscordDj.src.Modules
         }
 
         [Command("load", RunMode = RunMode.Async)]
-        [Summary("Диджей заряжай пластинки, авария идет в могилки. Подгружает заранее сохраненный плейлист. \n Прим.: !load \"Жанна Фрисби\"")]
+        [Summary("Подгружает заранее сохраненный плейлист. \n Прим.: !load \"Жанна Фрисби\"")]
         public async Task LoadCmd(string playListName)
         {
             await _service.LoadPlayList(Context.Channel, playListName);
+        }
+
+        [Command("remove", RunMode = RunMode.Async)]
+        [Summary("Удаляет выбранную песню из плейлиста. Прим.: !remove 13")]
+        public async Task RemoveCmd(int position)
+        {
+            await _service.RemoveSongAt(position, Context.Channel);
         }
     }
 }
