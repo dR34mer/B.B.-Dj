@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace BB_DiscordDj.src.Entities
 {
+    [DataContract]
     [Serializable]
     class SongQueue
     {
+        [DataMember]
         protected List<PlayerSong> Queue;
+        [DataMember]
         protected List<PlayerSong> OriginalSeq;
 
         public List<PlayerSong> QueueInstance

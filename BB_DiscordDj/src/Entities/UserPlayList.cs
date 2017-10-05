@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace BB_DiscordDj.src.Entities
@@ -28,11 +29,11 @@ namespace BB_DiscordDj.src.Entities
         public UserPlayList(String path)
         {
             UserPlayList other = null;
-            using(FileStream fs = new FileStream(Directory.GetCurrentDirectory() + @"\data\" + path + ".dat", FileMode.Open))
+            using(FileStream fs = new FileStream(Directory.GetCurrentDirectory() + @"\data\" + path + ".json", FileMode.Open))
             {
                 try
                 {
-                    other = (UserPlayList)new BinaryFormatter().Deserialize(fs);
+                    other = (UserPlayList)new DataContractJsonSerializer(typeof(UserPlayList)).ReadObject(fs);
                 }catch(Exception e)
                 {
                     Console.WriteLine(e.Message);
@@ -52,18 +53,21 @@ namespace BB_DiscordDj.src.Entities
             {
                 Directory.CreateDirectory(workingFolder);
             }
-            using (FileStream fs = new FileStream(Directory.GetCurrentDirectory() + @"\data\" + playListName + ".dat", FileMode.Create))
+            DataContractJsonSerializer jsonFormatter = new DataContractJsonSerializer(typeof(UserPlayList));
+            using (FileStream fs2 = new FileStream(workingFolder + playListName + ".json", FileMode.Create))
             {
                 try
                 {
-                    new BinaryFormatter().Serialize(fs, this);
+                    jsonFormatter.WriteObject(fs2, this);
                     return true;
-                }catch(Exception e)
+                }
+                catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
                     return false;
                 }
             }
         }
+
     }
 }
