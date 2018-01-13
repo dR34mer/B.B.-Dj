@@ -29,14 +29,32 @@ namespace BB_DiscordDj.src.Entities
         public UserPlayList(String path)
         {
             UserPlayList other = null;
-            using(FileStream fs = new FileStream(Directory.GetCurrentDirectory() + @"\data\" + path + ".json", FileMode.Open))
+            String file_Path = Directory.GetCurrentDirectory() + @"\data\" + path;
+            if (File.Exists(file_Path + ".json")) {
+                file_Path += ".json";
+                using (FileStream fs = new FileStream(file_Path, FileMode.Open))
+                {
+                    try
+                    {
+                        other = (UserPlayList)new DataContractJsonSerializer(typeof(UserPlayList)).ReadObject(fs);
+                    } catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                }
+            }
+            else
             {
-                try
+                file_Path += ".dat";
+                using(FileStream fs = new FileStream(file_Path, FileMode.Open))
                 {
-                    other = (UserPlayList)new DataContractJsonSerializer(typeof(UserPlayList)).ReadObject(fs);
-                }catch(Exception e)
-                {
-                    Console.WriteLine(e.Message);
+                    try
+                    {
+                        other = (UserPlayList)new BinaryFormatter().Deserialize(fs);
+                    }catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
                 }
             }
             this.Queue = other.Queue;

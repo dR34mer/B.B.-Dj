@@ -194,6 +194,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\BotBuilder.cs" />
     <Compile Include="src\Entities\AudioPlayer.cs" />
     <Compile Include="src\Entities\PlayerSong.cs" />
     <Compile Include="src\Entities\SongQueue.cs" />
