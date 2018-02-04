@@ -12,7 +12,6 @@ namespace BB_DiscordDj
     class Program
     {
         static void Main(string[] args)
-            //=> Console.WriteLine(AppContext.BaseDirectory);
             => new BotBuilder().StartAsync().GetAwaiter().GetResult();
     }
 }
